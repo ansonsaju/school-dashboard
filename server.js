@@ -29,19 +29,35 @@ app.use('/api/', limiter);
 let pool;
 
 function createPool() {
+  // Priority 1: Use DATABASE_URL (Railway's private network connection)
+  if (process.env.DATABASE_URL) {
+    console.log('📡 Connecting using DATABASE_URL (private network)...');
+    return mysql.createPool(process.env.DATABASE_URL);
+  }
+  
+  // Priority 2: Use MYSQL_URL (alternative private network)
+  if (process.env.MYSQL_URL) {
+    console.log('📡 Connecting using MYSQL_URL (private network)...');
+    return mysql.createPool(process.env.MYSQL_URL);
+  }
+  
+  // Priority 3: Use individual variables (fallback)
+  console.log('📡 Connecting using individual variables...');
   return mysql.createPool({
-    host: process.env.MYSQLHOST || process.env.MYSQL_HOST,
+    host: process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost',
     user: process.env.MYSQLUSER || process.env.MYSQL_USER || 'root',
-    password: process.env.MYSQLPASSWORD || process.env.MYSQL_ROOT_PASSWORD || process.env.MYSQL_PASSWORD,
+    password: process.env.MYSQLPASSWORD || process.env.MYSQL_ROOT_PASSWORD || process.env.MYSQL_PASSWORD || '',
     database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || 'railway',
-    port: process.env.MYSQLPORT || process.env.MYSQL_PORT || 3306,
+    port: parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || '3306'),
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
   });
 }
 
-// Auto-healing: Initialize database
+// Auto-healing: Initialize database with retry logic
 async function initDatabase() {
   let retries = 0;
   const maxRetries = 10;
@@ -52,8 +68,9 @@ async function initDatabase() {
         pool = createPool();
       }
 
+      console.log(`🔄 Attempting database connection (${retries + 1}/${maxRetries})...`);
       const connection = await pool.getConnection();
-      console.log('✅ Connected to MySQL database');
+      console.log('✅ Connected to MySQL database successfully!');
       
       // Create users table
       await connection.query(`
@@ -67,6 +84,7 @@ async function initDatabase() {
           INDEX idx_username (username)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
       `);
+      console.log('✅ Users table ready');
 
       // Create school_data table
       await connection.query(`
@@ -80,8 +98,9 @@ async function initDatabase() {
           INDEX idx_data_type (data_type)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
       `);
+      console.log('✅ School data table ready');
 
-      // Create students table for demo data
+      // Create students table
       await connection.query(`
         CREATE TABLE IF NOT EXISTS students (
           id INT AUTO_INCREMENT PRIMARY KEY,
@@ -93,6 +112,7 @@ async function initDatabase() {
           INDEX idx_school_student (school_id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
       `);
+      console.log('✅ Students table ready');
 
       // Check if demo accounts exist
       const [users] = await connection.query('SELECT COUNT(*) as count FROM users');
@@ -117,15 +137,20 @@ async function initDatabase() {
           ('abc', 'John Doe', 'Fashion Design', '2024-01-15'),
           ('abc', 'Jane Smith', 'Pattern Making', '2024-01-20'),
           ('abc', 'Mike Johnson', 'Textile Design', '2024-02-01'),
-          ('qwe', 'Sarah Wilson', 'Fashion Design', '2024-01-10'),
-          ('qwe', 'Tom Brown', 'Garment Construction', '2024-01-25')
+          ('abc', 'Emily Brown', 'Garment Construction', '2024-02-10'),
+          ('abc', 'Sarah Wilson', 'Fashion Illustration', '2024-02-15'),
+          ('qwe', 'David Lee', 'Fashion Design', '2024-01-10'),
+          ('qwe', 'Lisa Chen', 'Pattern Making', '2024-01-18'),
+          ('qwe', 'Tom Martinez', 'Garment Construction', '2024-01-25'),
+          ('qwe', 'Anna Taylor', 'Textile Design', '2024-02-05')
         `);
 
-        console.log('✅ Demo accounts and data created');
+        console.log('✅ Demo accounts and student data created');
       }
 
       connection.release();
       console.log('✅ Database initialized successfully');
+      console.log('🎉 All systems ready!');
       return true;
 
     } catch (error) {
@@ -137,6 +162,7 @@ async function initDatabase() {
         await new Promise(resolve => setTimeout(resolve, 5000));
       } else {
         console.error('❌ Max retries reached. Database initialization failed.');
+        console.error('💡 Check your DATABASE_URL or MySQL connection variables');
         return false;
       }
     }
@@ -241,8 +267,22 @@ app.get('/api/admin/schools', async (req, res) => {
 });
 
 // Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+app.get('/health', async (req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      database: 'connected'
+    });
+  } catch (error) {
+    res.status(503).json({ 
+      status: 'error', 
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error.message
+    });
+  }
 });
 
 // Serve frontend
@@ -252,19 +292,49 @@ app.get('*', (req, res) => {
 
 // Start server
 const server = app.listen(PORT, async () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log('='.repeat(50));
+  console.log('🚀 School Dashboard Server Starting...');
+  console.log('='.repeat(50));
+  console.log(`📍 Port: ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔌 Database URL: ${process.env.DATABASE_URL ? '✅ Set' : process.env.MYSQL_URL ? '✅ Set (MYSQL_URL)' : '❌ Not Set'}`);
+  console.log('='.repeat(50));
+  
   await initDatabase();
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received, closing server...');
+  console.log('⚠️ SIGTERM received, closing server gracefully...');
   server.close(() => {
-    console.log('Server closed');
+    console.log('✅ Server closed');
     if (pool) {
       pool.end();
+      console.log('✅ Database connections closed');
     }
     process.exit(0);
   });
+});
+
+process.on('SIGINT', () => {
+  console.log('\n⚠️ SIGINT received, closing server gracefully...');
+  server.close(() => {
+    console.log('✅ Server closed');
+    if (pool) {
+      pool.end();
+      console.log('✅ Database connections closed');
+    }
+    process.exit(0);
+  });
+});
+
+// Handle uncaught errors
+process.on('uncaughtException', (error) => {
+  console.error('💥 Uncaught Exception:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('💥 Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
 });
