@@ -29,19 +29,16 @@ app.use('/api/', limiter);
 let pool;
 
 function createPool() {
-  // Priority 1: Use DATABASE_URL (Railway's private network connection)
   if (process.env.DATABASE_URL) {
     console.log('📡 Connecting using DATABASE_URL (private network)...');
     return mysql.createPool(process.env.DATABASE_URL);
   }
   
-  // Priority 2: Use MYSQL_URL (alternative private network)
   if (process.env.MYSQL_URL) {
     console.log('📡 Connecting using MYSQL_URL (private network)...');
     return mysql.createPool(process.env.MYSQL_URL);
   }
   
-  // Priority 3: Use individual variables (fallback)
   console.log('📡 Connecting using individual variables...');
   return mysql.createPool({
     host: process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost',
@@ -57,7 +54,7 @@ function createPool() {
   });
 }
 
-// Auto-healing: Initialize database with retry logic
+// Auto-healing: Initialize database
 async function initDatabase() {
   let retries = 0;
   const maxRetries = 10;
@@ -72,7 +69,6 @@ async function initDatabase() {
       const connection = await pool.getConnection();
       console.log('✅ Connected to MySQL database successfully!');
       
-      // Create users table
       await connection.query(`
         CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
@@ -86,7 +82,6 @@ async function initDatabase() {
       `);
       console.log('✅ Users table ready');
 
-      // Create school_data table
       await connection.query(`
         CREATE TABLE IF NOT EXISTS school_data (
           id INT AUTO_INCREMENT PRIMARY KEY,
@@ -100,7 +95,6 @@ async function initDatabase() {
       `);
       console.log('✅ School data table ready');
 
-      // Create students table
       await connection.query(`
         CREATE TABLE IF NOT EXISTS students (
           id INT AUTO_INCREMENT PRIMARY KEY,
@@ -114,7 +108,6 @@ async function initDatabase() {
       `);
       console.log('✅ Students table ready');
 
-      // Check if demo accounts exist
       const [users] = await connection.query('SELECT COUNT(*) as count FROM users');
       
       if (users[0].count === 0) {
@@ -131,7 +124,6 @@ async function initDatabase() {
           ('admin', ?, 'Super Admin', 'admin')
         `, [hashedPassword1, hashedPassword2, hashedPasswordAdmin]);
 
-        // Insert demo students
         await connection.query(`
           INSERT INTO students (school_id, student_name, course, enrollment_date) VALUES
           ('abc', 'John Doe', 'Fashion Design', '2024-01-15'),
@@ -162,7 +154,6 @@ async function initDatabase() {
         await new Promise(resolve => setTimeout(resolve, 5000));
       } else {
         console.error('❌ Max retries reached. Database initialization failed.');
-        console.error('💡 Check your DATABASE_URL or MySQL connection variables');
         return false;
       }
     }
@@ -266,6 +257,38 @@ app.get('/api/admin/schools', async (req, res) => {
   }
 });
 
+// API: Admin - Add new school
+app.post('/api/admin/add-school', async (req, res) => {
+  try {
+    const { username, password, schoolName } = req.body;
+    
+    if (!username || !password || !schoolName) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const [existing] = await pool.query(
+      'SELECT * FROM users WHERE username = ?',
+      [username.toLowerCase().trim()]
+    );
+
+    if (existing.length > 0) {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await pool.query(
+      'INSERT INTO users (username, password, school_name, role) VALUES (?, ?, ?, ?)',
+      [username.toLowerCase().trim(), hashedPassword, schoolName, 'school']
+    );
+
+    res.json({ success: true, message: 'School added successfully' });
+  } catch (error) {
+    console.error('Add school error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Health check
 app.get('/health', async (req, res) => {
   try {
@@ -326,15 +349,4 @@ process.on('SIGINT', () => {
     }
     process.exit(0);
   });
-});
-
-// Handle uncaught errors
-process.on('uncaughtException', (error) => {
-  console.error('💥 Uncaught Exception:', error);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('💥 Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
 });
