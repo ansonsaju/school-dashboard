@@ -1,46 +1,51 @@
-const { useState, useEffect } = React;
-const { School, Users, Upload, LogOut, Shield, Activity, TrendingUp, FileText, Menu, X, UserPlus } = lucide;
+const { useState, useEffect, createElement: h } = React;
 
-// Create React elements helper
-const e = React.createElement;
+// Icon components
+const School = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M14 22v-4a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v4" }), h('path', { d: "M20 8v12a2 2 0 0 1-2 2H6" }), h('path', { d: "M2 10h20" }));
 
-// Asian Art Background Component
-function AsianArtBackground() {
-  return e('div', { className: 'fixed inset-0 overflow-hidden pointer-events-none opacity-20' },
-    e('svg', { className: 'absolute w-full h-full', xmlns: 'http://www.w3.org/2000/svg', style: { filter: 'contrast(1.2)' } },
-      e('defs', null,
-        e('pattern', { id: 'bamboo', x: '0', y: '0', width: '120', height: '200', patternUnits: 'userSpaceOnUse' },
-          e('line', { x1: '30', y1: '0', x2: '30', y2: '200', stroke: '#919D85', strokeWidth: '3' }),
-          e('line', { x1: '90', y1: '0', x2: '90', y2: '200', stroke: '#919D85', strokeWidth: '3' }),
-          e('circle', { cx: '30', cy: '50', r: '8', fill: 'none', stroke: '#919D85', strokeWidth: '2' }),
-          e('circle', { cx: '90', cy: '100', r: '8', fill: 'none', stroke: '#919D85', strokeWidth: '2' }),
-          e('circle', { cx: '30', cy: '150', r: '8', fill: 'none', stroke: '#919D85', strokeWidth: '2' }),
-          e('path', { d: 'M 25 30 Q 10 25 15 15', fill: 'none', stroke: '#BAC2B7', strokeWidth: '2' }),
-          e('path', { d: 'M 35 30 Q 50 25 45 15', fill: 'none', stroke: '#BAC2B7', strokeWidth: '2' }),
-          e('path', { d: 'M 85 80 Q 70 75 75 65', fill: 'none', stroke: '#BAC2B7', strokeWidth: '2' }),
-          e('path', { d: 'M 95 80 Q 110 75 105 65', fill: 'none', stroke: '#BAC2B7', strokeWidth: '2' })
-        ),
-        e('pattern', { id: 'mountains', x: '0', y: '0', width: '400', height: '300', patternUnits: 'userSpaceOnUse' },
-          e('path', { d: 'M 0 200 Q 100 120 200 200', fill: 'none', stroke: '#919D85', strokeWidth: '2', opacity: '0.5' }),
-          e('path', { d: 'M 150 220 Q 250 140 350 220', fill: 'none', stroke: '#BAC2B7', strokeWidth: '2', opacity: '0.4' }),
-          e('circle', { cx: '350', cy: '100', r: '30', fill: '#e8a598', opacity: '0.3' })
+const Users = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" }), h('circle', { cx: "9", cy: "7", r: "4" }), h('path', { d: "M22 21v-2a4 4 0 0 0-3-3.87" }), h('path', { d: "M16 3.13a4 4 0 0 1 0 7.75" }));
+
+const Upload = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }), h('polyline', { points: "17 8 12 3 7 8" }), h('line', { x1: "12", x2: "12", y1: "3", y2: "15" }));
+
+const LogOut = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" }), h('polyline', { points: "16 17 21 12 16 7" }), h('line', { x1: "21", x2: "9", y1: "12", y2: "12" }));
+
+const Shield = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" }));
+
+const Activity = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M22 12h-4l-3 9L9 3l-3 9H2" }));
+
+const TrendingUp = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('polyline', { points: "23 6 13.5 15.5 8.5 10.5 1 18" }), h('polyline', { points: "17 6 23 6 23 12" }));
+
+const FileText = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" }), h('polyline', { points: "14 2 14 8 20 8" }), h('line', { x1: "16", x2: "8", y1: "13", y2: "13" }), h('line', { x1: "16", x2: "8", y1: "17", y2: "17" }), h('line', { x1: "10", x2: "8", y1: "9", y2: "9" }));
+
+const Menu = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('line', { x1: "4", x2: "20", y1: "12", y2: "12" }), h('line', { x1: "4", x2: "20", y1: "6", y2: "6" }), h('line', { x1: "4", x2: "20", y1: "18", y2: "18" }));
+
+const X = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M18 6 6 18" }), h('path', { d: "m6 6 12 12" }));
+
+// Japanese Background Component
+const JapaneseBackground = () => {
+  return h('div', { className: 'fixed inset-0 overflow-hidden pointer-events-none opacity-10' },
+    h('svg', { className: 'absolute w-full h-full', xmlns: 'http://www.w3.org/2000/svg' },
+      h('defs', {},
+        h('pattern', { id: 'wave', x: '0', y: '0', width: '200', height: '200', patternUnits: 'userSpaceOnUse' },
+          h('path', { d: 'M0 100 Q 50 80, 100 100 T 200 100', fill: 'none', stroke: '#565285', strokeWidth: '2' }),
+          h('path', { d: 'M0 120 Q 50 100, 100 120 T 200 120', fill: 'none', stroke: '#9A98BD', strokeWidth: '2' }),
+          h('circle', { cx: '150', cy: '50', r: '20', fill: '#B3A7BF', opacity: '0.3' })
         )
       ),
-      e('rect', { width: '100%', height: '50%', fill: 'url(#mountains)' }),
-      e('rect', { y: '50%', width: '100%', height: '50%', fill: 'url(#bamboo)' })
+      h('rect', { width: '100%', height: '100%', fill: 'url(#wave)' })
     )
   );
-}
+};
 
 // Login Page Component
-function LoginPage({ onLogin }) {
+const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setError('');
     setLoading(true);
 
@@ -52,6 +57,7 @@ function LoginPage({ onLogin }) {
         throw new Error('Please fill in all fields');
       }
 
+      // Call backend API
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -72,65 +78,61 @@ function LoginPage({ onLogin }) {
     }
   };
 
-  return e('div', { 
-    className: 'min-h-screen flex items-center justify-center p-4', 
-    style: { background: 'linear-gradient(135deg, #CFD3D4 0%, #BAC2B7 100%)' } 
-  },
-    e(AsianArtBackground),
-    e('div', { className: 'w-full max-w-md relative z-10' },
-      e('div', { className: 'bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-gray-200' },
-        e('div', { className: 'text-center mb-8' },
-          e('div', { 
-            className: 'inline-flex items-center justify-center w-20 h-20 rounded-full mb-4', 
-            style: { background: 'linear-gradient(135deg, #919D85 0%, #BAC2B7 100%)' } 
-          },
-            e(School, { size: 40, color: 'white' })
+  return h('div', { className: 'min-h-screen flex items-center justify-center p-4', style: { background: 'linear-gradient(135deg, #2F3162 0%, #292A3E 100%)' } },
+    h(JapaneseBackground),
+    h('div', { className: 'w-full max-w-md relative z-10' },
+      h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20' },
+        h('div', { className: 'text-center mb-8' },
+          h('div', { className: 'inline-flex items-center justify-center w-20 h-20 rounded-full mb-4', style: { background: 'linear-gradient(135deg, #B3A7BF 0%, #9A98BD 100%)' } },
+            h(School, { className: 'w-10 h-10 text-white' })
           ),
-          e('h1', { className: 'text-3xl font-bold mb-2', style: { color: '#919D85' } }, 'Tailoring Schools'),
-          e('p', { className: 'text-gray-600' }, 'Multi-Tenant Dashboard System')
+          h('h1', { className: 'text-3xl font-bold text-white mb-2' }, 'Tailoring Schools'),
+          h('p', { className: 'text-white/70' }, 'Multi-Tenant Dashboard System')
         ),
-        e('div', { className: 'space-y-6' },
-          error && e('div', { className: 'bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg' }, error),
-          e('div', null,
-            e('label', { className: 'block text-gray-700 text-sm font-medium mb-2' }, 'Username'),
-            e('input', {
+        h('div', { className: 'space-y-6' },
+          error && h('div', { className: 'bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg' }, error),
+          h('div', {},
+            h('label', { className: 'block text-white/80 text-sm font-medium mb-2' }, 'Username'),
+            h('input', {
               type: 'text',
               value: username,
-              onChange: (ev) => setUsername(ev.target.value),
-              className: 'w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#919D85] transition-all',
-              placeholder: 'Enter your username'
+              onChange: (e) => setUsername(e.target.value),
+              className: 'w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#B3A7BF] transition-all',
+              placeholder: 'Enter your username',
+              required: true
             })
           ),
-          e('div', null,
-            e('label', { className: 'block text-gray-700 text-sm font-medium mb-2' }, 'Password'),
-            e('input', {
+          h('div', {},
+            h('label', { className: 'block text-white/80 text-sm font-medium mb-2' }, 'Password'),
+            h('input', {
               type: 'password',
               value: password,
-              onChange: (ev) => setPassword(ev.target.value),
-              className: 'w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#919D85] transition-all',
-              placeholder: 'Enter your password'
+              onChange: (e) => setPassword(e.target.value),
+              className: 'w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#B3A7BF] transition-all',
+              placeholder: 'Enter your password',
+              required: true
             })
           ),
-          e('button', {
+          h('button', {
             onClick: handleLogin,
             disabled: loading,
             className: 'w-full py-3 rounded-lg font-semibold text-white transition-all transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed',
-            style: { background: 'linear-gradient(135deg, #919D85 0%, #BAC2B7 100%)' }
+            style: { background: 'linear-gradient(135deg, #9A98BD 0%, #565285 100%)' }
           }, loading ? 'Logging in...' : 'Login')
         ),
-        e('div', { className: 'mt-6 p-4 rounded-lg bg-gray-50 border border-gray-200' },
-          e('p', { className: 'text-gray-600 text-xs mb-2' }, 'Demo Credentials:'),
-          e('p', { className: 'text-gray-700 text-xs' }, 'ABC School: abc / abc123'),
-          e('p', { className: 'text-gray-700 text-xs' }, 'QWE School: qwe / qwe123'),
-          e('p', { className: 'text-gray-700 text-xs' }, 'Admin: admin / admin123')
+        h('div', { className: 'mt-6 p-4 rounded-lg bg-white/5 border border-white/10' },
+          h('p', { className: 'text-white/60 text-xs mb-2' }, 'Demo Credentials:'),
+          h('p', { className: 'text-white/80 text-xs' }, 'ABC School: abc / abc123'),
+          h('p', { className: 'text-white/80 text-xs' }, 'QWE School: qwe / qwe123'),
+          h('p', { className: 'text-white/80 text-xs' }, 'Admin: admin / admin123')
         )
       )
     )
   );
-}
+};
 
 // School Dashboard Component
-function SchoolDashboard({ user, onLogout }) {
+const SchoolDashboard = ({ user, onLogout }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [data, setData] = useState({ students: 0, courses: 12, teachers: 8, revenue: 45678 });
@@ -152,87 +154,86 @@ function SchoolDashboard({ user, onLogout }) {
   };
 
   const StatCard = ({ icon: Icon, title, value, color }) => {
-    return e('div', { className: 'bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-gray-200 hover:scale-105 transition-transform cursor-pointer shadow-sm' },
-      e('div', { className: 'flex items-center justify-between mb-4' },
-        e('div', { className: 'p-3 rounded-xl', style: { backgroundColor: color } },
-          e(Icon, { size: 24, color: 'white' })
+    return h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:scale-105 transition-transform cursor-pointer' },
+      h('div', { className: 'flex items-center justify-between mb-4' },
+        h('div', { className: 'p-3 rounded-xl', style: { backgroundColor: color } },
+          h(Icon, { className: 'w-6 h-6 text-white' })
         ),
-        e(TrendingUp, { size: 20, color: '#919D85' })
+        h(TrendingUp, { className: 'w-5 h-5 text-green-400' })
       ),
-      e('h3', { className: 'text-gray-600 text-sm mb-1' }, title),
-      e('p', { className: 'text-3xl font-bold', style: { color: '#919D85' } }, value)
+      h('h3', { className: 'text-white/70 text-sm mb-1' }, title),
+      h('p', { className: 'text-3xl font-bold text-white' }, value)
     );
   };
 
-  return e('div', { className: 'min-h-screen', style: { background: 'linear-gradient(135deg, #CFD3D4 0%, #BAC2B7 50%, #919D85 100%)' } },
-    e(AsianArtBackground),
-    e('header', { className: 'relative z-10 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm' },
-      e('div', { className: 'px-6 py-4 flex items-center justify-between' },
-        e('div', { className: 'flex items-center space-x-4' },
-          e('button', { onClick: () => setSidebarOpen(!sidebarOpen), className: 'lg:hidden', style: { color: '#919D85' } },
-            sidebarOpen ? e(X, { size: 24 }) : e(Menu, { size: 24 })
+  return h('div', { className: 'min-h-screen', style: { background: 'linear-gradient(135deg, #2F3162 0%, #292A3E 100%)' } },
+    h(JapaneseBackground),
+    h('header', { className: 'relative z-10 bg-white/5 backdrop-blur-lg border-b border-white/10' },
+      h('div', { className: 'px-6 py-4 flex items-center justify-between' },
+        h('div', { className: 'flex items-center space-x-4' },
+          h('button', { onClick: () => setSidebarOpen(!sidebarOpen), className: 'lg:hidden text-white' },
+            sidebarOpen ? h(X) : h(Menu)
           ),
-          e('div', { className: 'flex items-center space-x-3' },
-            e('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center', style: { backgroundColor: '#919D85' } },
-              e(School, { size: 24, color: 'white' })
+          h('div', { className: 'flex items-center space-x-3' },
+            h('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center', style: { backgroundColor: '#B3A7BF' } },
+              h(School, { className: 'w-6 h-6 text-white' })
             ),
-            e('div', null,
-              e('h1', { className: 'text-xl font-bold', style: { color: '#919D85' } }, user.schoolName),
-              e('p', { className: 'text-gray-600 text-sm' }, 'Dashboard')
+            h('div', {},
+              h('h1', { className: 'text-xl font-bold text-white' }, user.schoolName),
+              h('p', { className: 'text-white/60 text-sm' }, 'Dashboard')
             )
           )
         ),
-        e('button', {
+        h('button', {
           onClick: onLogout,
-          className: 'flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-all'
+          className: 'flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 transition-all'
         },
-          e(LogOut, { size: 16 }),
-          e('span', null, 'Logout')
+          h(LogOut, { className: 'w-4 h-4' }),
+          h('span', {}, 'Logout')
         )
       )
     ),
-    e('div', { className: 'flex' },
-      e('aside', { className: `${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static z-20 w-64 h-[calc(100vh-73px)] bg-white/80 backdrop-blur-lg border-r border-gray-200 transition-transform` },
-        e('nav', { className: 'p-4 space-y-2' },
+    h('div', { className: 'flex' },
+      h('aside', { className: `${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static z-20 w-64 h-[calc(100vh-73px)] bg-white/5 backdrop-blur-lg border-r border-white/10 transition-transform` },
+        h('nav', { className: 'p-4 space-y-2' },
           [
             { id: 'overview', icon: Activity, label: 'Overview' },
             { id: 'students', icon: Users, label: 'Students' },
             { id: 'courses', icon: FileText, label: 'Courses' },
             { id: 'upload', icon: Upload, label: 'Upload Data' }
           ].map(item =>
-            e('button', {
+            h('button', {
               key: item.id,
               onClick: () => setActiveTab(item.id),
-              className: `w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === item.id ? 'text-white' : 'text-gray-600 hover:bg-gray-50'}`,
-              style: activeTab === item.id ? { backgroundColor: '#919D85' } : {}
+              className: `w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === item.id ? 'bg-[#9A98BD] text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'}`
             },
-              e(item.icon, { size: 20 }),
-              e('span', null, item.label)
+              h(item.icon, { className: 'w-5 h-5' }),
+              h('span', {}, item.label)
             )
           )
         )
       ),
-      e('main', { className: 'flex-1 p-6 relative z-10 overflow-y-auto h-[calc(100vh-73px)]' },
-        activeTab === 'overview' && e('div', { className: 'space-y-6' },
-          e('h2', { className: 'text-2xl font-bold mb-6', style: { color: '#919D85' } }, `Welcome back, ${user.schoolName}!`),
-          e('div', { className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6' },
-            e(StatCard, { icon: Users, title: 'Total Students', value: data.students, color: '#919D85' }),
-            e(StatCard, { icon: FileText, title: 'Active Courses', value: data.courses, color: '#BAC2B7' }),
-            e(StatCard, { icon: Users, title: 'Teachers', value: data.teachers, color: '#919D85' }),
-            e(StatCard, { icon: TrendingUp, title: 'Revenue', value: `$${data.revenue.toLocaleString()}`, color: '#BAC2B7' })
+      h('main', { className: 'flex-1 p-6 relative z-10 overflow-y-auto h-[calc(100vh-73px)]' },
+        activeTab === 'overview' && h('div', { className: 'space-y-6' },
+          h('h2', { className: 'text-2xl font-bold text-white mb-6' }, `Welcome back, ${user.schoolName}!`),
+          h('div', { className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6' },
+            h(StatCard, { icon: Users, title: 'Total Students', value: data.students, color: '#9A98BD' }),
+            h(StatCard, { icon: FileText, title: 'Active Courses', value: data.courses, color: '#565285' }),
+            h(StatCard, { icon: Users, title: 'Teachers', value: data.teachers, color: '#B3A7BF' }),
+            h(StatCard, { icon: TrendingUp, title: 'Revenue', value: `$${data.revenue.toLocaleString()}`, color: '#9A98BD' })
           ),
-          e('div', { className: 'bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-gray-200 shadow-sm' },
-            e('h3', { className: 'text-xl font-bold mb-4', style: { color: '#919D85' } }, 'Recent Students'),
-            e('div', { className: 'space-y-3' },
+          h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+            h('h3', { className: 'text-xl font-bold text-white mb-4' }, 'Recent Students'),
+            h('div', { className: 'space-y-3' },
               students.slice(0, 5).map((student, i) =>
-                e('div', { key: i, className: 'flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all' },
-                  e('div', { className: 'flex items-center space-x-3' },
-                    e('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center', style: { backgroundColor: '#BAC2B7' } },
-                      e(Users, { size: 20, color: 'white' })
+                h('div', { key: i, className: 'flex items-center justify-between p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all' },
+                  h('div', { className: 'flex items-center space-x-3' },
+                    h('div', { className: 'w-10 h-10 rounded-full bg-[#B3A7BF] flex items-center justify-center' },
+                      h(Users, { className: 'w-5 h-5 text-white' })
                     ),
-                    e('div', null,
-                      e('p', { className: 'font-medium', style: { color: '#919D85' } }, student.student_name),
-                      e('p', { className: 'text-gray-600 text-sm' }, student.course || 'No course')
+                    h('div', {},
+                      h('p', { className: 'text-white font-medium' }, student.student_name),
+                      h('p', { className: 'text-white/60 text-sm' }, student.course || 'No course')
                     )
                   )
                 )
@@ -240,28 +241,23 @@ function SchoolDashboard({ user, onLogout }) {
             )
           )
         ),
-        activeTab === 'upload' && e('div', { className: 'space-y-6' },
-          e('h2', { className: 'text-2xl font-bold mb-6', style: { color: '#919D85' } }, 'Upload Data'),
-          e('div', { className: 'bg-white/90 backdrop-blur-lg rounded-2xl p-8 border border-gray-200 text-center shadow-sm' },
-            e(Upload, { size: 64, color: '#919D85', style: { margin: '0 auto 1rem' } }),
-            e('h3', { className: 'text-xl font-bold mb-2', style: { color: '#919D85' } }, 'Upload Files'),
-            e('p', { className: 'text-gray-600 mb-6' }, 'Drag and drop files or click to browse'),
-            e('button', { className: 'px-6 py-3 rounded-lg text-white font-semibold transition-all hover:opacity-90', style: { backgroundColor: '#919D85' } }, 'Select Files')
+        activeTab === 'upload' && h('div', { className: 'space-y-6' },
+          h('h2', { className: 'text-2xl font-bold text-white mb-6' }, 'Upload Data'),
+          h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center' },
+            h(Upload, { className: 'w-16 h-16 text-[#B3A7BF] mx-auto mb-4' }),
+            h('h3', { className: 'text-xl font-bold text-white mb-2' }, 'Upload Files'),
+            h('p', { className: 'text-white/60 mb-6' }, 'Drag and drop files or click to browse'),
+            h('button', { className: 'px-6 py-3 rounded-lg bg-[#9A98BD] text-white font-semibold hover:bg-[#565285] transition-all' }, 'Select Files')
           )
         )
       )
     )
   );
-}
+};
 
 // Admin Dashboard Component
-function AdminDashboard({ user, onLogout }) {
+const AdminDashboard = ({ user, onLogout }) => {
   const [schools, setSchools] = useState([]);
-  const [showAddUser, setShowAddUser] = useState(false);
-  const [newUser, setNewUser] = useState({ username: '', password: '', schoolName: '' });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     fetchSchools();
@@ -282,167 +278,68 @@ function AdminDashboard({ user, onLogout }) {
     }
   };
 
-  const handleAddUser = async () => {
-    setError('');
-    setSuccess('');
-    setLoading(true);
-
-    try {
-      if (!newUser.username || !newUser.password || !newUser.schoolName) {
-        throw new Error('All fields are required');
-      }
-
-      const response = await fetch('/api/admin/add-school', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newUser)
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to add school');
-      }
-
-      setSuccess('School added successfully!');
-      setNewUser({ username: '', password: '', schoolName: '' });
-      setShowAddUser(false);
-      fetchSchools();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return e('div', { className: 'min-h-screen', style: { background: 'linear-gradient(135deg, #CFD3D4 0%, #BAC2B7 50%, #919D85 100%)' } },
-    e(AsianArtBackground),
-    e('header', { className: 'relative z-10 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm' },
-      e('div', { className: 'px-6 py-4 flex items-center justify-between' },
-        e('div', { className: 'flex items-center space-x-3' },
-          e('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center', style: { backgroundColor: '#919D85' } },
-            e(Shield, { size: 24, color: 'white' })
+  return h('div', { className: 'min-h-screen', style: { background: 'linear-gradient(135deg, #2F3162 0%, #292A3E 100%)' } },
+    h(JapaneseBackground),
+    h('header', { className: 'relative z-10 bg-white/5 backdrop-blur-lg border-b border-white/10' },
+      h('div', { className: 'px-6 py-4 flex items-center justify-between' },
+        h('div', { className: 'flex items-center space-x-3' },
+          h('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center', style: { backgroundColor: '#B3A7BF' } },
+            h(Shield, { className: 'w-6 h-6 text-white' })
           ),
-          e('div', null,
-            e('h1', { className: 'text-xl font-bold', style: { color: '#919D85' } }, 'Super Admin Dashboard'),
-            e('p', { className: 'text-gray-600 text-sm' }, 'Manage all schools')
+          h('div', {},
+            h('h1', { className: 'text-xl font-bold text-white' }, 'Super Admin Dashboard'),
+            h('p', { className: 'text-white/60 text-sm' }, 'Manage all schools')
           )
         ),
-        e('button', {
+        h('button', {
           onClick: onLogout,
-          className: 'flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-all'
+          className: 'flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 transition-all'
         },
-          e(LogOut, { size: 16 }),
-          e('span', null, 'Logout')
+          h(LogOut, { className: 'w-4 h-4' }),
+          h('span', {}, 'Logout')
         )
       )
     ),
-    e('main', { className: 'p-6 relative z-10' },
-      e('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-6 mb-8' },
-        e('div', { className: 'bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-gray-200 shadow-sm' },
-          e(School, { size: 48, color: '#919D85', style: { marginBottom: '1rem' } }),
-          e('h3', { className: 'text-gray-600 text-sm mb-1' }, 'Total Schools'),
-          e('p', { className: 'text-3xl font-bold', style: { color: '#919D85' } }, schools.length)
+    h('main', { className: 'p-6 relative z-10' },
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-6 mb-8' },
+        h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+          h(School, { className: 'w-12 h-12 text-[#B3A7BF] mb-4' }),
+          h('h3', { className: 'text-white/70 text-sm mb-1' }, 'Total Schools'),
+          h('p', { className: 'text-3xl font-bold text-white' }, schools.length)
         ),
-        e('div', { className: 'bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-gray-200 shadow-sm' },
-          e(Users, { size: 48, color: '#BAC2B7', style: { marginBottom: '1rem' } }),
-          e('h3', { className: 'text-gray-600 text-sm mb-1' }, 'Total Students'),
-          e('p', { className: 'text-3xl font-bold', style: { color: '#919D85' } }, schools.reduce((sum, s) => sum + s.students, 0))
+        h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+          h(Users, { className: 'w-12 h-12 text-[#9A98BD] mb-4' }),
+          h('h3', { className: 'text-white/70 text-sm mb-1' }, 'Total Students'),
+          h('p', { className: 'text-3xl font-bold text-white' }, schools.reduce((sum, s) => sum + s.students, 0))
         ),
-        e('div', { className: 'bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-gray-200 shadow-sm' },
-          e(Activity, { size: 48, color: '#919D85', style: { marginBottom: '1rem' } }),
-          e('h3', { className: 'text-gray-600 text-sm mb-1' }, 'Active Schools'),
-          e('p', { className: 'text-3xl font-bold', style: { color: '#919D85' } }, schools.filter(s => s.status === 'active').length)
+        h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+          h(Activity, { className: 'w-12 h-12 text-[#565285] mb-4' }),
+          h('h3', { className: 'text-white/70 text-sm mb-1' }, 'Active Schools'),
+          h('p', { className: 'text-3xl font-bold text-white' }, schools.filter(s => s.status === 'active').length)
         )
       ),
-      e('div', { className: 'bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-gray-200 shadow-sm' },
-        e('div', { className: 'flex items-center justify-between mb-6' },
-          e('h2', { className: 'text-2xl font-bold', style: { color: '#919D85' } }, 'All Schools'),
-          e('button', {
-            onClick: () => setShowAddUser(!showAddUser),
-            className: 'flex items-center space-x-2 px-4 py-2 rounded-lg text-white font-semibold transition-all hover:opacity-90',
-            style: { backgroundColor: '#919D85' }
-          },
-            e(UserPlus, { size: 20 }),
-            e('span', null, 'Add School')
-          )
-        ),
-        showAddUser && e('div', { className: 'mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200' },
-          e('h3', { className: 'text-lg font-bold mb-4', style: { color: '#919D85' } }, 'Add New School'),
-          error && e('div', { className: 'mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm' }, error),
-          success && e('div', { className: 'mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm' }, success),
-          e('div', { className: 'space-y-4' },
-            e('div', null,
-              e('label', { className: 'block text-gray-700 text-sm font-medium mb-2' }, 'Username'),
-              e('input', {
-                type: 'text',
-                value: newUser.username,
-                onChange: (ev) => setNewUser({ ...newUser, username: ev.target.value }),
-                className: 'w-full px-4 py-2 rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#919D85]',
-                placeholder: 'e.g., xyz',
-                disabled: loading
-              })
-            ),
-            e('div', null,
-              e('label', { className: 'block text-gray-700 text-sm font-medium mb-2' }, 'Password'),
-              e('input', {
-                type: 'password',
-                value: newUser.password,
-                onChange: (ev) => setNewUser({ ...newUser, password: ev.target.value }),
-                className: 'w-full px-4 py-2 rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#919D85]',
-                placeholder: 'Enter password',
-                disabled: loading
-              })
-            ),
-            e('div', null,
-              e('label', { className: 'block text-gray-700 text-sm font-medium mb-2' }, 'School Name'),
-              e('input', {
-                type: 'text',
-                value: newUser.schoolName,
-                onChange: (ev) => setNewUser({ ...newUser, schoolName: ev.target.value }),
-                className: 'w-full px-4 py-2 rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#919D85]',
-                placeholder: 'e.g., XYZ School',
-                disabled: loading
-              })
-            ),
-            e('div', { className: 'flex space-x-3' },
-              e('button', {
-                onClick: handleAddUser,
-                disabled: loading,
-                className: 'flex-1 px-4 py-2 rounded-lg text-white font-semibold transition-all hover:opacity-90 disabled:opacity-50',
-                style: { backgroundColor: '#919D85' }
-              }, loading ? 'Adding...' : 'Add School'),
-              e('button', {
-                onClick: () => {
-                  setShowAddUser(false);
-                  setNewUser({ username: '', password: '', schoolName: '' });
-                  setError('');
-                  setSuccess('');
-                },
-                className: 'px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-semibold transition-all hover:bg-gray-300'
-              }, 'Cancel')
-            )
-          )
-        ),
-        e('div', { className: 'space-y-4' },
+      h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+        h('h2', { className: 'text-2xl font-bold text-white mb-6' }, 'All Schools'),
+        h('div', { className: 'space-y-4' },
           schools.map(school =>
-            e('div', { key: school.id, className: 'flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all' },
-              e('div', { className: 'flex items-center space-x-4' },
-                e('div', { className: 'w-12 h-12 rounded-full flex items-center justify-center', style: { backgroundColor: '#BAC2B7' } },
-                  e(School, { size: 24, color: 'white' })
+            h('div', { key: school.id, className: 'flex items-center justify-between p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all' },
+              h('div', { className: 'flex items-center space-x-4' },
+                h('div', { className: 'w-12 h-12 rounded-full bg-[#B3A7BF] flex items-center justify-center' },
+                  h(School, { className: 'w-6 h-6 text-white' })
                 ),
-                e('div', null,
-                  e('h3', { className: 'font-semibold', style: { color: '#919D85' } }, school.name),
-                  e('p', { className: 'text-gray-600 text-sm' }, `${school.students} students`)
+                h('div', {},
+                  h('h3', { className: 'text-white font-semibold' }, school.name),
+                  h('p', { className: 'text-white/60 text-sm' }, `${school.students} students`)
                 )
               ),
-              e('span', { className: 'px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium' }, school.status)
+              h('span', { className: 'px-3 py-1 rounded-full bg-green-500/20 text-green-200 text-sm' }, school.status)
             )
           )
         )
       )
     )
   );
-}
+};
 
 // Main App Component
 function App() {
@@ -457,18 +354,15 @@ function App() {
   };
 
   if (!user) {
-    return e(LoginPage, { onLogin: handleLogin });
+    return h(LoginPage, { onLogin: handleLogin });
   }
 
   return user.role === 'admin' 
-    ? e(AdminDashboard, { user: user, onLogout: handleLogout })
-    : e(SchoolDashboard, { user: user, onLogout: handleLogout });
+    ? h(AdminDashboard, { user: user, onLogout: handleLogout })
+    : h(SchoolDashboard, { user: user, onLogout: handleLogout });
 }
-
-// Initialize Lucide icons
-lucide.createIcons();
 
 // Render the app
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
-root.render(e(App));
+root.render(h(App));
