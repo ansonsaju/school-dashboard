@@ -1,830 +1,368 @@
-// Excel Editor Pro - Complete Application
-// Color palette
-const colors = {
-  sage: '#6D7F6C',
-  mint: '#D7E7A4',
-  terracotta: '#C68A60',
-  blush: '#DDC1B0',
-  cream: '#E1ECB3',
-  ivory: '#FFF4EB'
+const { useState, useEffect, createElement: h } = React;
+
+// Icon components
+const School = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M14 22v-4a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v4" }), h('path', { d: "M20 8v12a2 2 0 0 1-2 2H6" }), h('path', { d: "M2 10h20" }));
+
+const Users = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" }), h('circle', { cx: "9", cy: "7", r: "4" }), h('path', { d: "M22 21v-2a4 4 0 0 0-3-3.87" }), h('path', { d: "M16 3.13a4 4 0 0 1 0 7.75" }));
+
+const Upload = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }), h('polyline', { points: "17 8 12 3 7 8" }), h('line', { x1: "12", x2: "12", y1: "3", y2: "15" }));
+
+const LogOut = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" }), h('polyline', { points: "16 17 21 12 16 7" }), h('line', { x1: "21", x2: "9", y1: "12", y2: "12" }));
+
+const Shield = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" }));
+
+const Activity = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M22 12h-4l-3 9L9 3l-3 9H2" }));
+
+const TrendingUp = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('polyline', { points: "23 6 13.5 15.5 8.5 10.5 1 18" }), h('polyline', { points: "17 6 23 6 23 12" }));
+
+const FileText = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" }), h('polyline', { points: "14 2 14 8 20 8" }), h('line', { x1: "16", x2: "8", y1: "13", y2: "13" }), h('line', { x1: "16", x2: "8", y1: "17", y2: "17" }), h('line', { x1: "10", x2: "8", y1: "9", y2: "9" }));
+
+const Menu = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('line', { x1: "4", x2: "20", y1: "12", y2: "12" }), h('line', { x1: "4", x2: "20", y1: "6", y2: "6" }), h('line', { x1: "4", x2: "20", y1: "18", y2: "18" }));
+
+const X = (props) => h('svg', { ...props, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }, h('path', { d: "M18 6 6 18" }), h('path', { d: "m6 6 12 12" }));
+
+// Japanese Background Component
+const JapaneseBackground = () => {
+  return h('div', { className: 'fixed inset-0 overflow-hidden pointer-events-none opacity-10' },
+    h('svg', { className: 'absolute w-full h-full', xmlns: 'http://www.w3.org/2000/svg' },
+      h('defs', {},
+        h('pattern', { id: 'wave', x: '0', y: '0', width: '200', height: '200', patternUnits: 'userSpaceOnUse' },
+          h('path', { d: 'M0 100 Q 50 80, 100 100 T 200 100', fill: 'none', stroke: '#565285', strokeWidth: '2' }),
+          h('path', { d: 'M0 120 Q 50 100, 100 120 T 200 120', fill: 'none', stroke: '#9A98BD', strokeWidth: '2' }),
+          h('circle', { cx: '150', cy: '50', r: '20', fill: '#B3A7BF', opacity: '0.3' })
+        )
+      ),
+      h('rect', { width: '100%', height: '100%', fill: 'url(#wave)' })
+    )
+  );
 };
 
-// Global state
-let workbook = null;
-let sheets = [];
-let activeSheet = 0;
-let data = [];
-let headers = [];
-let history = [];
-let historyIndex = -1;
-let filters = {};
-let searchTerm = '';
-let currentCardIndex = 0;
-let isCardView = false;
-let autoSaveEnabled = true;
-let customSuggestions = {};
-let fileName = '';
-let saveTimeout = null;
+// Login Page Component
+const LoginPage = ({ onLogin }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-// Initialize app when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  initializeApp();
-  loadFromStorage();
-});
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-function initializeApp() {
-  // Setup event listeners
-  document.getElementById('uploadBtn').addEventListener('click', () => document.getElementById('fileInput').click());
-  document.getElementById('fileInput').addEventListener('change', handleFileUpload);
-  document.getElementById('downloadBtn').addEventListener('click', downloadFile);
-  document.getElementById('undoBtn').addEventListener('click', undo);
-  document.getElementById('redoBtn').addEventListener('click', redo);
-  document.getElementById('addRowBtn').addEventListener('click', addRow);
-  document.getElementById('historyBtn').addEventListener('click', toggleHistory);
-  document.getElementById('tableViewBtn').addEventListener('click', () => setViewMode(false));
-  document.getElementById('cardViewBtn').addEventListener('click', () => setViewMode(true));
-  document.getElementById('autoSaveCheckbox').addEventListener('change', (e) => autoSaveEnabled = e.target.checked);
-  document.getElementById('globalSearch').addEventListener('input', (e) => {
-    searchTerm = e.target.value;
-    renderData();
-  });
-  document.getElementById('prevCard').addEventListener('click', () => navigateCard(-1));
-  document.getElementById('nextCard').addEventListener('click', () => navigateCard(1));
-  document.getElementById('deleteCard').addEventListener('click', deleteCurrentCard);
-  document.getElementById('clearHistoryBtn').addEventListener('click', clearAllHistory);
-  document.getElementById('emptyStateBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+    try {
+      const sanitizedUsername = username.trim().toLowerCase();
+      const sanitizedPassword = password.trim();
 
-  // Keyboard shortcuts
-  document.addEventListener('keydown', handleKeyboardShortcuts);
-}
-
-async function handleFileUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  fileName = file.name;
-  try {
-    const arrayBuffer = await file.arrayBuffer();
-    workbook = XLSX.read(arrayBuffer);
-    sheets = workbook.SheetNames;
-    
-    if (sheets.length > 0) {
-      loadSheet(0);
-      renderSheetButtons();
-      updateUI();
-      saveFileHistory(file.name);
-      showToast('File uploaded successfully!', 'success');
-    }
-  } catch (error) {
-    console.error('Upload error:', error);
-    showToast('Error loading file', 'error');
-  }
-}
-
-function loadSheet(index) {
-  const ws = workbook.Sheets[sheets[index]];
-  const jsonData = XLSX.utils.sheet_to_json(ws, { defval: '' });
-  
-  if (jsonData.length > 0) {
-    headers = Object.keys(jsonData[0]);
-    data = jsonData;
-    activeSheet = index;
-    history = [JSON.parse(JSON.stringify(data))];
-    historyIndex = 0;
-    filters = {};
-    searchTerm = '';
-    currentCardIndex = 0;
-    analyzeDataForSuggestions();
-    renderData();
-    renderFilters();
-    debouncedSave();
-  }
-}
-
-function analyzeDataForSuggestions() {
-  customSuggestions = {};
-  
-  headers.forEach(header => {
-    const values = data.map(row => row[header]).filter(v => v !== '' && v !== '-');
-    
-    if (values.length === 0) return;
-    
-    // Frequency analysis
-    const frequency = {};
-    values.forEach(v => {
-      frequency[v] = (frequency[v] || 0) + 1;
-    });
-    
-    const sortedByFreq = Object.entries(frequency)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10)
-      .map(([val]) => val);
-
-    // Check if numeric
-    const numValues = values.filter(v => !isNaN(v) && v !== '').map(Number);
-    
-    if (numValues.length > values.length * 0.5) {
-      // Numeric field
-      const avg = numValues.reduce((a, b) => a + b, 0) / numValues.length;
-      const min = Math.min(...numValues);
-      const max = Math.max(...numValues);
-      
-      customSuggestions[header] = {
-        type: 'numeric',
-        common: sortedByFreq,
-        stats: { avg, min, max },
-        recent: numValues.slice(-5)
-      };
-    } else {
-      // Text field
-      customSuggestions[header] = {
-        type: 'text',
-        common: sortedByFreq,
-        recent: values.slice(-5)
-      };
-    }
-  });
-}
-
-function generateSuggestions(header, currentValue) {
-  const headerSuggestions = customSuggestions[header];
-  if (!headerSuggestions) return [];
-
-  let suggestions = new Set();
-
-  // Add common values
-  headerSuggestions.common.forEach(v => suggestions.add(v));
-  
-  // Add recent values
-  if (headerSuggestions.recent) {
-    headerSuggestions.recent.forEach(v => suggestions.add(v));
-  }
-
-  // For numeric fields, add smart predictions
-  if (headerSuggestions.type === 'numeric' && currentValue && !isNaN(currentValue)) {
-    const num = Number(currentValue);
-    const { min, max, avg } = headerSuggestions.stats;
-    
-    // Add nearby values
-    [-5, -2, -1, 1, 2, 5].forEach(offset => {
-      const val = num + offset;
-      if (val >= min && val <= max) {
-        suggestions.add(Math.round(val * 100) / 100);
+      if (!sanitizedUsername || !sanitizedPassword) {
+        throw new Error('Please fill in all fields');
       }
-    });
-    
-    // Add average
-    suggestions.add(Math.round(avg * 100) / 100);
-  }
 
-  return Array.from(suggestions).slice(0, 12);
-}
-
-function renderSheetButtons() {
-  const container = document.getElementById('sheetButtons');
-  container.innerHTML = sheets.map((sheet, idx) => `
-    <button 
-      onclick="handleSheetChange(${idx})" 
-      class="px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-        activeSheet === idx 
-          ? 'bg-gradient-to-r from-[#6D7F6C] to-[#D7E7A4] text-white shadow-lg' 
-          : 'bg-white text-gray-700 hover:bg-gray-100 border-2 border-gray-200'
-      }"
-    >
-      ${sheet}
-    </button>
-  `).join('');
-  
-  document.getElementById('sheetsNav').classList.remove('hidden');
-}
-
-function handleSheetChange(index) {
-  if (workbook) {
-    loadSheet(index);
-    renderSheetButtons();
-    if (fileName) saveFileHistory(fileName);
-  }
-}
-
-function renderFilters() {
-  const container = document.getElementById('filterContainer');
-  container.innerHTML = headers.map(header => {
-    const uniqueValues = [...new Set(data.map(row => row[header]))]
-      .filter(v => v !== '' && v !== '-')
-      .sort();
-    
-    return `
-      <div>
-        <label class="block text-xs font-medium text-gray-700 mb-1 truncate" title="${header}">
-          ${header}
-        </label>
-        <select 
-          onchange="handleFilterChange('${header}', this.value)" 
-          class="w-full px-2 py-2 border-2 border-gray-200 rounded-lg focus:border-[#6D7F6C] focus:outline-none text-sm"
-        >
-          <option value="">All (${uniqueValues.length})</option>
-          ${uniqueValues.slice(0, 100).map(val => `
-            <option value="${val}">${val}</option>
-          `).join('')}
-        </select>
-      </div>
-    `;
-  }).join('');
-}
-
-function handleFilterChange(header, value) {
-  if (value === '') {
-    delete filters[header];
-  } else {
-    filters[header] = value;
-  }
-  currentCardIndex = 0;
-  renderData();
-}
-
-function getFilteredData() {
-  return data.filter(row => {
-    const matchesFilters = Object.entries(filters).every(([key, value]) => 
-      String(row[key]) === String(value)
-    );
-    const matchesSearch = searchTerm === '' || 
-      Object.values(row).some(val => 
-        String(val).toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    return matchesFilters && matchesSearch;
-  });
-}
-
-function setViewMode(cardMode) {
-  isCardView = cardMode;
-  
-  const tableBtn = document.getElementById('tableViewBtn');
-  const cardBtn = document.getElementById('cardViewBtn');
-  const tableView = document.getElementById('tableView');
-  const cardView = document.getElementById('cardView');
-  
-  if (cardMode) {
-    tableBtn.classList.remove('active');
-    cardBtn.classList.add('active');
-    tableView.classList.add('hidden');
-    cardView.classList.remove('hidden');
-  } else {
-    cardBtn.classList.remove('active');
-    tableBtn.classList.add('active');
-    cardView.classList.add('hidden');
-    tableView.classList.remove('hidden');
-  }
-  
-  renderData();
-  debouncedSave();
-}
-
-function renderData() {
-  const filteredData = getFilteredData();
-  
-  if (isCardView) {
-    renderCardView(filteredData);
-  } else {
-    renderTableView(filteredData);
-  }
-}
-
-function renderTableView(filteredData) {
-  const headerRow = document.getElementById('tableHeader');
-  const tbody = document.getElementById('tableBody');
-  
-  // Render headers
-  headerRow.innerHTML = `
-    <th class="px-4 py-3 text-left font-semibold text-sm">Actions</th>
-    ${headers.map(h => `
-      <th class="px-4 py-3 text-left font-semibold text-sm whitespace-nowrap" title="${h}">
-        ${h}
-      </th>
-    `).join('')}
-  `;
-  
-  // Render rows
-  if (filteredData.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="${headers.length + 1}" class="px-4 py-8 text-center text-gray-500">
-          No data matches your filters
-        </td>
-      </tr>
-    `;
-  } else {
-    tbody.innerHTML = filteredData.map(row => {
-      const originalIndex = data.indexOf(row);
-      return `
-        <tr class="border-b border-gray-100 hover:bg-gradient-to-r hover:from-[#E1ECB3]/30 hover:to-transparent transition-all">
-          <td class="px-4 py-2">
-            <button 
-              onclick="deleteRow(${originalIndex})" 
-              class="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all"
-              title="Delete row"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-            </button>
-          </td>
-          ${headers.map(header => `
-            <td class="px-4 py-2">
-              ${renderCellInput(originalIndex, header, row[header])}
-            </td>
-          `).join('')}
-        </tr>
-      `;
-    }).join('');
-  }
-}
-
-function renderCardView(filteredData) {
-  const container = document.getElementById('cardContainer');
-  const counter = document.getElementById('cardCounter');
-  const prevBtn = document.getElementById('prevCard');
-  const nextBtn = document.getElementById('nextCard');
-  const deleteBtn = document.getElementById('deleteCard');
-  
-  if (filteredData.length === 0) {
-    container.innerHTML = `
-      <div class="text-center py-8">
-        <p class="text-gray-500 text-lg">No data matches your filters</p>
-      </div>
-    `;
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;
-    deleteBtn.disabled = true;
-    return;
-  }
-  
-  if (currentCardIndex >= filteredData.length) {
-    currentCardIndex = 0;
-  }
-  
-  const row = filteredData[currentCardIndex];
-  const originalIndex = data.indexOf(row);
-  
-  counter.textContent = `Card ${currentCardIndex + 1} of ${filteredData.length}`;
-  prevBtn.disabled = currentCardIndex === 0;
-  nextBtn.disabled = currentCardIndex === filteredData.length - 1;
-  deleteBtn.disabled = false;
-  
-  container.innerHTML = `
-    <div class="space-y-4">
-      ${headers.map(header => `
-        <div class="border-b border-gray-100 pb-4 last:border-0">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            ${header}
-          </label>
-          ${renderCellInput(originalIndex, header, row[header], true)}
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-function renderCellInput(rowIndex, header, value, isCard = false) {
-  const suggestions = generateSuggestions(header, value);
-  const inputId = `input-${rowIndex}-${header.replace(/\s+/g, '_')}`;
-  
-  if (suggestions.length > 0) {
-    return `
-      <div class="relative">
-        <input 
-          type="text" 
-          id="${inputId}"
-          value="${value || ''}" 
-          onchange="updateCell(${rowIndex}, '${header}', this.value)"
-          onfocus="showSuggestions('${inputId}', ${rowIndex}, '${header}')"
-          class="w-full px-3 py-2 bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-lg focus:border-[#6D7F6C] focus:ring-2 focus:ring-[#6D7F6C]/20 transition-all ${isCard ? 'text-base' : 'text-sm'}"
-          placeholder="Enter ${header}"
-        />
-        <div 
-          id="suggestions-${inputId}" 
-          class="hidden absolute z-50 mt-2 w-full bg-white/95 backdrop-blur-xl border-2 border-[#6D7F6C] rounded-xl shadow-2xl max-h-64 overflow-y-auto"
-          style="animation: fadeIn 0.3s ease-out"
-        >
-          <div class="sticky top-0 bg-gradient-to-r from-[#6D7F6C] to-[#C68A60] text-white px-4 py-2 text-xs font-semibold flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 3l-1.5 4.5h-4.5l3.75 2.7-1.5 4.5 3.75-2.7 3.75 2.7-1.5-4.5 3.75-2.7h-4.5z"/>
-            </svg>
-            Smart Suggestions
-          </div>
-          ${suggestions.map(s => {
-            const isCommon = customSuggestions[header]?.common.includes(s);
-            const isRecent = customSuggestions[header]?.recent?.includes(s);
-            return `
-              <div 
-                class="suggestion-item px-4 py-3 hover:bg-gradient-to-r hover:from-[#E1ECB3] hover:to-[#FFF4EB] cursor-pointer transition-all border-b border-gray-100 last:border-0 flex items-center justify-between"
-                onclick="selectSuggestion(${rowIndex}, '${header}', '${s}', '${inputId}')"
-              >
-                <span class="font-medium text-gray-800">${s}</span>
-                ${isCommon ? '<span class="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-[#C68A60] to-[#DDC1B0] text-white">Common</span>' : ''}
-                ${isRecent && !isCommon ? '<span class="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-[#D7E7A4] to-[#E1ECB3] text-gray-700">Recent</span>' : ''}
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
-  } else {
-    return `
-      <input 
-        type="text" 
-        value="${value || ''}" 
-        onchange="updateCell(${rowIndex}, '${header}', this.value)"
-        class="w-full px-3 py-2 bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-lg focus:border-[#6D7F6C] focus:ring-2 focus:ring-[#6D7F6C]/20 transition-all ${isCard ? 'text-base' : 'text-sm'}"
-        placeholder="Enter ${header}"
-      />
-    `;
-  }
-}
-
-function showSuggestions(inputId, rowIndex, header) {
-  const suggestionBox = document.getElementById(`suggestions-${inputId}`);
-  if (suggestionBox) {
-    // Hide all other suggestion boxes
-    document.querySelectorAll('[id^="suggestions-"]').forEach(box => {
-      if (box.id !== `suggestions-${inputId}`) {
-        box.classList.add('hidden');
-      }
-    });
-    
-    suggestionBox.classList.remove('hidden');
-    
-    // Close on outside click
-    setTimeout(() => {
-      document.addEventListener('click', function hideSuggestions(e) {
-        const input = document.getElementById(inputId);
-        if (input && !input.contains(e.target) && !suggestionBox.contains(e.target)) {
-          suggestionBox.classList.add('hidden');
-          document.removeEventListener('click', hideSuggestions);
-        }
+      // Call backend API
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: sanitizedUsername, password: sanitizedPassword })
       });
-    }, 100);
-  }
-}
 
-function selectSuggestion(rowIndex, header, value, inputId) {
-  updateCell(rowIndex, header, value);
-  
-  const input = document.getElementById(inputId);
-  if (input) {
-    input.value = value;
-  }
-  
-  const suggestionBox = document.getElementById(`suggestions-${inputId}`);
-  if (suggestionBox) {
-    suggestionBox.classList.add('hidden');
-  }
-  
-  // Auto-advance to next field in card view
-  if (isCardView) {
-    const currentIndex = headers.indexOf(header);
-    if (currentIndex < headers.length - 1) {
-      setTimeout(() => {
-        const nextHeader = headers[currentIndex + 1];
-        const nextInputId = `input-${rowIndex}-${nextHeader.replace(/\s+/g, '_')}`;
-        const nextInput = document.getElementById(nextInputId);
-        if (nextInput) nextInput.focus();
-      }, 100);
-    } else {
-      const filteredData = getFilteredData();
-      if (currentCardIndex < filteredData.length - 1) {
-        navigateCard(1);
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Login failed');
       }
+
+      const userData = await response.json();
+      onLogin(userData);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  }
-}
-
-function updateCell(rowIndex, header, value) {
-  if (rowIndex < 0 || rowIndex >= data.length) return;
-  
-  data[rowIndex][header] = value;
-  addToHistory(JSON.parse(JSON.stringify(data)));
-  analyzeDataForSuggestions();
-  debouncedSave();
-}
-
-function addRow() {
-  const newRow = {};
-  headers.forEach(h => newRow[h] = '');
-  data.push(newRow);
-  
-  addToHistory(JSON.parse(JSON.stringify(data)));
-  debouncedSave();
-  renderData();
-  
-  if (isCardView) {
-    const filteredData = getFilteredData();
-    currentCardIndex = filteredData.length - 1;
-    renderData();
-  }
-  
-  showToast('Row added successfully', 'success');
-}
-
-function deleteRow(index) {
-  if (index < 0 || index >= data.length) return;
-  
-  if (confirm('Delete this row?')) {
-    data.splice(index, 1);
-    addToHistory(JSON.parse(JSON.stringify(data)));
-    debouncedSave();
-    
-    const filteredData = getFilteredData();
-    if (currentCardIndex >= filteredData.length) {
-      currentCardIndex = Math.max(0, filteredData.length - 1);
-    }
-    
-    renderData();
-    showToast('Row deleted', 'success');
-  }
-}
-
-function deleteCurrentCard() {
-  const filteredData = getFilteredData();
-  if (filteredData.length === 0) return;
-  
-  const row = filteredData[currentCardIndex];
-  const originalIndex = data.indexOf(row);
-  deleteRow(originalIndex);
-}
-
-function navigateCard(direction) {
-  const filteredData = getFilteredData();
-  currentCardIndex += direction;
-  currentCardIndex = Math.max(0, Math.min(currentCardIndex, filteredData.length - 1));
-  renderData();
-}
-
-function addToHistory(newData) {
-  history = history.slice(0, historyIndex + 1);
-  history.push(newData);
-  historyIndex = history.length - 1;
-  
-  if (history.length > 50) {
-    history.shift();
-    historyIndex--;
-  }
-  
-  updateHistoryButtons();
-}
-
-function undo() {
-  if (historyIndex > 0) {
-    historyIndex--;
-    data = JSON.parse(JSON.stringify(history[historyIndex]));
-    updateHistoryButtons();
-    analyzeDataForSuggestions();
-    debouncedSave();
-    renderData();
-  }
-}
-
-function redo() {
-  if (historyIndex < history.length - 1) {
-    historyIndex++;
-    data = JSON.parse(JSON.stringify(history[historyIndex]));
-    updateHistoryButtons();
-    analyzeDataForSuggestions();
-    debouncedSave();
-    renderData();
-  }
-}
-
-function updateHistoryButtons() {
-  document.getElementById('undoBtn').disabled = historyIndex <= 0;
-  document.getElementById('redoBtn').disabled = historyIndex >= history.length - 1;
-}
-
-function toggleHistory() {
-  const panel = document.getElementById('historyPanel');
-  const isVisible = !panel.classList.contains('hidden');
-  
-  if (isVisible) {
-    panel.classList.add('hidden');
-  } else {
-    renderHistoryList();
-    panel.classList.remove('hidden');
-  }
-}
-
-function renderHistoryList() {
-  const fileHistory = JSON.parse(localStorage.getItem('excelFileHistory') || '[]');
-  const container = document.getElementById('historyList');
-  
-  if (fileHistory.length === 0) {
-    container.innerHTML = '<p class="text-gray-500 text-center py-4 text-sm">No saved files</p>';
-    return;
-  }
-  
-  container.innerHTML = fileHistory.map((item, idx) => {
-    const date = new Date(item.timestamp);
-    const timeAgo = getTimeAgo(date);
-    
-    return `
-      <div 
-        class="file-item p-3 bg-white rounded-lg border-2 border-gray-200 hover:border-[#6D7F6C] cursor-pointer transition-all hover:shadow-md"
-        onclick='loadFileFromHistory(${JSON.stringify(item).replace(/'/g, "\\'")})'
-      >
-        <div class="flex justify-between items-start">
-          <div class="flex-1 min-w-0">
-            <p class="font-semibold text-gray-800 text-sm truncate">${item.fileName}</p>
-            <p class="text-xs text-gray-600">${item.sheets?.length || 0} sheets • ${item.data?.length || 0} rows</p>
-          </div>
-          <span class="text-xs text-gray-500 whitespace-nowrap ml-2">${timeAgo}</span>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function loadFileFromHistory(item) {
-  fileName = item.fileName;
-  data = item.data || [];
-  headers = item.headers || [];
-  sheets = item.sheets || [];
-  activeSheet = item.activeSheet || 0;
-  history = [JSON.parse(JSON.stringify(data))];
-  historyIndex = 0;
-  
-  if (data.length > 0) {
-    analyzeDataForSuggestions();
-    renderData();
-    renderFilters();
-    if (sheets.length > 0) renderSheetButtons();
-    updateUI();
-    document.getElementById('historyPanel').classList.add('hidden');
-    showToast(`Loaded: ${fileName}`, 'success');
-  }
-}
-
-function clearAllHistory() {
-  if (confirm('Clear all saved files? This cannot be undone.')) {
-    localStorage.removeItem('excelFileHistory');
-    renderHistoryList();
-    showToast('History cleared', 'success');
-  }
-}
-
-function getTimeAgo(date) {
-  const seconds = Math.floor((new Date() - date) / 1000);
-  const intervals = {
-    year: 31536000,
-    month: 2592000,
-    week: 604800,
-    day: 86400,
-    hour: 3600,
-    minute: 60
   };
-  
-  for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-    const interval = Math.floor(seconds / secondsInUnit);
-    if (interval >= 1) {
-      return `${interval} ${unit}${interval !== 1 ? 's' : ''} ago`;
+
+  return h('div', { className: 'min-h-screen flex items-center justify-center p-4', style: { background: 'linear-gradient(135deg, #2F3162 0%, #292A3E 100%)' } },
+    h(JapaneseBackground),
+    h('div', { className: 'w-full max-w-md relative z-10' },
+      h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20' },
+        h('div', { className: 'text-center mb-8' },
+          h('div', { className: 'inline-flex items-center justify-center w-20 h-20 rounded-full mb-4', style: { background: 'linear-gradient(135deg, #B3A7BF 0%, #9A98BD 100%)' } },
+            h(School, { className: 'w-10 h-10 text-white' })
+          ),
+          h('h1', { className: 'text-3xl font-bold text-white mb-2' }, 'Tailoring Schools'),
+          h('p', { className: 'text-white/70' }, 'Multi-Tenant Dashboard System')
+        ),
+        h('div', { className: 'space-y-6' },
+          error && h('div', { className: 'bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg' }, error),
+          h('div', {},
+            h('label', { className: 'block text-white/80 text-sm font-medium mb-2' }, 'Username'),
+            h('input', {
+              type: 'text',
+              value: username,
+              onChange: (e) => setUsername(e.target.value),
+              className: 'w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#B3A7BF] transition-all',
+              placeholder: 'Enter your username',
+              required: true
+            })
+          ),
+          h('div', {},
+            h('label', { className: 'block text-white/80 text-sm font-medium mb-2' }, 'Password'),
+            h('input', {
+              type: 'password',
+              value: password,
+              onChange: (e) => setPassword(e.target.value),
+              className: 'w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#B3A7BF] transition-all',
+              placeholder: 'Enter your password',
+              required: true
+            })
+          ),
+          h('button', {
+            onClick: handleLogin,
+            disabled: loading,
+            className: 'w-full py-3 rounded-lg font-semibold text-white transition-all transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed',
+            style: { background: 'linear-gradient(135deg, #9A98BD 0%, #565285 100%)' }
+          }, loading ? 'Logging in...' : 'Login')
+        ),
+        h('div', { className: 'mt-6 p-4 rounded-lg bg-white/5 border border-white/10' },
+          h('p', { className: 'text-white/60 text-xs mb-2' }, 'Demo Credentials:'),
+          h('p', { className: 'text-white/80 text-xs' }, 'ABC School: abc / abc123'),
+          h('p', { className: 'text-white/80 text-xs' }, 'QWE School: qwe / qwe123'),
+          h('p', { className: 'text-white/80 text-xs' }, 'Admin: admin / admin123')
+        )
+      )
+    )
+  );
+};
+
+// School Dashboard Component
+const SchoolDashboard = ({ user, onLogout }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [data, setData] = useState({ students: 0, courses: 12, teachers: 8, revenue: 45678 });
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    fetchSchoolData();
+  }, [user.username]);
+
+  const fetchSchoolData = async () => {
+    try {
+      const response = await fetch(`/api/school-data/${user.username}`);
+      const result = await response.json();
+      setStudents(result.students || []);
+      setData(prev => ({ ...prev, students: result.students?.length || 0 }));
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-  }
-  
-  return 'Just now';
-}
-
-function downloadFile() {
-  if (data.length === 0) return;
-  
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(data);
-  XLSX.utils.book_append_sheet(wb, ws, sheets[activeSheet] || 'Sheet1');
-  
-  const downloadName = fileName 
-    ? fileName.replace('.xlsx', `_edited_${Date.now()}.xlsx`) 
-    : `edited_${Date.now()}.xlsx`;
-  
-  XLSX.writeFile(wb, downloadName);
-  showToast('File downloaded successfully!', 'success');
-}
-
-function debouncedSave() {
-  if (saveTimeout) clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(() => saveToStorage(), 1000);
-}
-
-function saveToStorage() {
-  if (!autoSaveEnabled || data.length === 0) return;
-  if (fileName) saveFileHistory(fileName);
-}
-
-function saveFileHistory(name) {
-  const fileHistory = JSON.parse(localStorage.getItem('excelFileHistory') || '[]');
-  const fileEntry = {
-    fileName: name,
-    timestamp: new Date().toISOString(),
-    data: data,
-    headers: headers,
-    sheets: sheets,
-    activeSheet: activeSheet
   };
-  
-  const existingIndex = fileHistory.findIndex(f => f.fileName === name);
-  if (existingIndex >= 0) {
-    fileHistory.splice(existingIndex, 1);
-  }
-  
-  fileHistory.unshift(fileEntry);
-  localStorage.setItem('excelFileHistory', JSON.stringify(fileHistory.slice(0, 10)));
-}
 
-function loadFromStorage() {
-  try {
-    const fileHistory = JSON.parse(localStorage.getItem('excelFileHistory') || '[]');
-    if (fileHistory.length > 0) {
-      loadFileFromHistory(fileHistory[0]);
+  const StatCard = ({ icon: Icon, title, value, color }) => {
+    return h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:scale-105 transition-transform cursor-pointer' },
+      h('div', { className: 'flex items-center justify-between mb-4' },
+        h('div', { className: 'p-3 rounded-xl', style: { backgroundColor: color } },
+          h(Icon, { className: 'w-6 h-6 text-white' })
+        ),
+        h(TrendingUp, { className: 'w-5 h-5 text-green-400' })
+      ),
+      h('h3', { className: 'text-white/70 text-sm mb-1' }, title),
+      h('p', { className: 'text-3xl font-bold text-white' }, value)
+    );
+  };
+
+  return h('div', { className: 'min-h-screen', style: { background: 'linear-gradient(135deg, #2F3162 0%, #292A3E 100%)' } },
+    h(JapaneseBackground),
+    h('header', { className: 'relative z-10 bg-white/5 backdrop-blur-lg border-b border-white/10' },
+      h('div', { className: 'px-6 py-4 flex items-center justify-between' },
+        h('div', { className: 'flex items-center space-x-4' },
+          h('button', { onClick: () => setSidebarOpen(!sidebarOpen), className: 'lg:hidden text-white' },
+            sidebarOpen ? h(X) : h(Menu)
+          ),
+          h('div', { className: 'flex items-center space-x-3' },
+            h('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center', style: { backgroundColor: '#B3A7BF' } },
+              h(School, { className: 'w-6 h-6 text-white' })
+            ),
+            h('div', {},
+              h('h1', { className: 'text-xl font-bold text-white' }, user.schoolName),
+              h('p', { className: 'text-white/60 text-sm' }, 'Dashboard')
+            )
+          )
+        ),
+        h('button', {
+          onClick: onLogout,
+          className: 'flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 transition-all'
+        },
+          h(LogOut, { className: 'w-4 h-4' }),
+          h('span', {}, 'Logout')
+        )
+      )
+    ),
+    h('div', { className: 'flex' },
+      h('aside', { className: `${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static z-20 w-64 h-[calc(100vh-73px)] bg-white/5 backdrop-blur-lg border-r border-white/10 transition-transform` },
+        h('nav', { className: 'p-4 space-y-2' },
+          [
+            { id: 'overview', icon: Activity, label: 'Overview' },
+            { id: 'students', icon: Users, label: 'Students' },
+            { id: 'courses', icon: FileText, label: 'Courses' },
+            { id: 'upload', icon: Upload, label: 'Upload Data' }
+          ].map(item =>
+            h('button', {
+              key: item.id,
+              onClick: () => setActiveTab(item.id),
+              className: `w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === item.id ? 'bg-[#9A98BD] text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'}`
+            },
+              h(item.icon, { className: 'w-5 h-5' }),
+              h('span', {}, item.label)
+            )
+          )
+        )
+      ),
+      h('main', { className: 'flex-1 p-6 relative z-10 overflow-y-auto h-[calc(100vh-73px)]' },
+        activeTab === 'overview' && h('div', { className: 'space-y-6' },
+          h('h2', { className: 'text-2xl font-bold text-white mb-6' }, `Welcome back, ${user.schoolName}!`),
+          h('div', { className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6' },
+            h(StatCard, { icon: Users, title: 'Total Students', value: data.students, color: '#9A98BD' }),
+            h(StatCard, { icon: FileText, title: 'Active Courses', value: data.courses, color: '#565285' }),
+            h(StatCard, { icon: Users, title: 'Teachers', value: data.teachers, color: '#B3A7BF' }),
+            h(StatCard, { icon: TrendingUp, title: 'Revenue', value: `$${data.revenue.toLocaleString()}`, color: '#9A98BD' })
+          ),
+          h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+            h('h3', { className: 'text-xl font-bold text-white mb-4' }, 'Recent Students'),
+            h('div', { className: 'space-y-3' },
+              students.slice(0, 5).map((student, i) =>
+                h('div', { key: i, className: 'flex items-center justify-between p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all' },
+                  h('div', { className: 'flex items-center space-x-3' },
+                    h('div', { className: 'w-10 h-10 rounded-full bg-[#B3A7BF] flex items-center justify-center' },
+                      h(Users, { className: 'w-5 h-5 text-white' })
+                    ),
+                    h('div', {},
+                      h('p', { className: 'text-white font-medium' }, student.student_name),
+                      h('p', { className: 'text-white/60 text-sm' }, student.course || 'No course')
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ),
+        activeTab === 'upload' && h('div', { className: 'space-y-6' },
+          h('h2', { className: 'text-2xl font-bold text-white mb-6' }, 'Upload Data'),
+          h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center' },
+            h(Upload, { className: 'w-16 h-16 text-[#B3A7BF] mx-auto mb-4' }),
+            h('h3', { className: 'text-xl font-bold text-white mb-2' }, 'Upload Files'),
+            h('p', { className: 'text-white/60 mb-6' }, 'Drag and drop files or click to browse'),
+            h('button', { className: 'px-6 py-3 rounded-lg bg-[#9A98BD] text-white font-semibold hover:bg-[#565285] transition-all' }, 'Select Files')
+          )
+        )
+      )
+    )
+  );
+};
+
+// Admin Dashboard Component
+const AdminDashboard = ({ user, onLogout }) => {
+  const [schools, setSchools] = useState([]);
+
+  useEffect(() => {
+    fetchSchools();
+  }, []);
+
+  const fetchSchools = async () => {
+    try {
+      const response = await fetch('/api/admin/schools');
+      const data = await response.json();
+      setSchools(data.map(s => ({ 
+        id: s.username, 
+        name: s.school_name, 
+        students: s.student_count || 0, 
+        status: 'active' 
+      })));
+    } catch (error) {
+      console.error('Error fetching schools:', error);
     }
-  } catch (e) {
-    console.error('Load error:', e);
+  };
+
+  return h('div', { className: 'min-h-screen', style: { background: 'linear-gradient(135deg, #2F3162 0%, #292A3E 100%)' } },
+    h(JapaneseBackground),
+    h('header', { className: 'relative z-10 bg-white/5 backdrop-blur-lg border-b border-white/10' },
+      h('div', { className: 'px-6 py-4 flex items-center justify-between' },
+        h('div', { className: 'flex items-center space-x-3' },
+          h('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center', style: { backgroundColor: '#B3A7BF' } },
+            h(Shield, { className: 'w-6 h-6 text-white' })
+          ),
+          h('div', {},
+            h('h1', { className: 'text-xl font-bold text-white' }, 'Super Admin Dashboard'),
+            h('p', { className: 'text-white/60 text-sm' }, 'Manage all schools')
+          )
+        ),
+        h('button', {
+          onClick: onLogout,
+          className: 'flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 transition-all'
+        },
+          h(LogOut, { className: 'w-4 h-4' }),
+          h('span', {}, 'Logout')
+        )
+      )
+    ),
+    h('main', { className: 'p-6 relative z-10' },
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-6 mb-8' },
+        h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+          h(School, { className: 'w-12 h-12 text-[#B3A7BF] mb-4' }),
+          h('h3', { className: 'text-white/70 text-sm mb-1' }, 'Total Schools'),
+          h('p', { className: 'text-3xl font-bold text-white' }, schools.length)
+        ),
+        h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+          h(Users, { className: 'w-12 h-12 text-[#9A98BD] mb-4' }),
+          h('h3', { className: 'text-white/70 text-sm mb-1' }, 'Total Students'),
+          h('p', { className: 'text-3xl font-bold text-white' }, schools.reduce((sum, s) => sum + s.students, 0))
+        ),
+        h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+          h(Activity, { className: 'w-12 h-12 text-[#565285] mb-4' }),
+          h('h3', { className: 'text-white/70 text-sm mb-1' }, 'Active Schools'),
+          h('p', { className: 'text-3xl font-bold text-white' }, schools.filter(s => s.status === 'active').length)
+        )
+      ),
+      h('div', { className: 'bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20' },
+        h('h2', { className: 'text-2xl font-bold text-white mb-6' }, 'All Schools'),
+        h('div', { className: 'space-y-4' },
+          schools.map(school =>
+            h('div', { key: school.id, className: 'flex items-center justify-between p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all' },
+              h('div', { className: 'flex items-center space-x-4' },
+                h('div', { className: 'w-12 h-12 rounded-full bg-[#B3A7BF] flex items-center justify-center' },
+                  h(School, { className: 'w-6 h-6 text-white' })
+                ),
+                h('div', {},
+                  h('h3', { className: 'text-white font-semibold' }, school.name),
+                  h('p', { className: 'text-white/60 text-sm' }, `${school.students} students`)
+                )
+              ),
+              h('span', { className: 'px-3 py-1 rounded-full bg-green-500/20 text-green-200 text-sm' }, school.status)
+            )
+          )
+        )
+      )
+    )
+  );
+};
+
+// Main App Component
+function App() {
+  const [user, setUser] = useState(null);
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
+
+  if (!user) {
+    return h(LoginPage, { onLogin: handleLogin });
   }
+
+  return user.role === 'admin' 
+    ? h(AdminDashboard, { user: user, onLogout: handleLogout })
+    : h(SchoolDashboard, { user: user, onLogout: handleLogout });
 }
 
-function updateUI() {
-  const hasData = data.length > 0;
-  
-  document.getElementById('emptyState').classList.toggle('hidden', hasData);
-  document.getElementById('tableView').classList.toggle('hidden', !hasData || isCardView);
-  document.getElementById('cardView').classList.toggle('hidden', !hasData || !isCardView);
-  document.getElementById('sheetsNav').classList.toggle('hidden', sheets.length === 0);
-  document.getElementById('filterSection').classList.toggle('hidden', !hasData);
-  
-  document.getElementById('downloadBtn').disabled = !hasData;
-  document.getElementById('addRowBtn').disabled = !hasData;
-  
-  updateHistoryButtons();
-}
-
-function showToast(message, type = 'success') {
-  const container = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  
-  const icon = type === 'success' 
-    ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'
-    : '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
-  
-  toast.innerHTML = `
-    <div class="flex items-center gap-2">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        ${icon}
-      </svg>
-      <span>${message}</span>
-    </div>
-  `;
-  
-  container.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.classList.add('hiding');
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
-}
-
-function handleKeyboardShortcuts(e) {
-  // Undo: Ctrl+Z or Cmd+Z
-  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-    e.preventDefault();
-    undo();
-    showToast('Undo', 'success');
-  }
-  // Redo: Ctrl+Y or Cmd+Shift+Z
-  else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
-    e.preventDefault();
-    redo();
-    showToast('Redo', 'success');
-  }
-  // Save: Ctrl+S or Cmd+S
-  else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-    e.preventDefault();
-    saveToStorage();
-    showToast('Saved', 'success');
-  }
-  // Card navigation with arrow keys (only in card view)
-  else if (isCardView && !e.target.matches('input, textarea, select')) {
-    if (e.key === 'ArrowLeft' && currentCardIndex > 0) {
-      e.preventDefault();
-      navigateCard(-1);
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      navigateCard(1);
-    }
-  }
-}
-
-// Auto-save before page unload
-window.addEventListener('beforeunload', () => {
-  if (autoSaveEnabled && data.length > 0) {
-    saveToStorage();
-  }
-});
-
-// Initialize UI state
-updateUI();
+// Render the app
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container);
+root.render(h(App));
